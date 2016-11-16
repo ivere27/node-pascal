@@ -2,6 +2,14 @@
 Embed Node.js into Free Pascal
 
 
+## linux
+```
+# toby and node-pascal
+clang++ ../toby/toby.cpp -c -o toby.o --std=c++11 -fPIC -I../node/deps/v8/include/ -I../node/src/ -g \
+&& fpc -g -Cg example.pas \
+&& LD_LIBRARY_PATH=. ./example
+```
+
 ## mac - build node.js and toby for i386
 ```
 # toby

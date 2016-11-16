@@ -3,15 +3,18 @@ program example;
 {$mode objfpc}
 {$H+}
 
-// {$link toby.o}
-// {$Link libnode.51.dylib}
-// {$linklib c}
-// {$linklib stdc++}
-// {$LinkLib gcc_s.1}
-// {$LinkLib pthread}
+{$ifdef linux}
+{$link toby.o}
+{$Link libnode.so.48}
+{$linklib c}
+{$linklib stdc++}
+{$LinkLib gcc_s}
+{$LinkLib pthread}
+{$LinkLib dl}
+{$endif}
 
 uses
-  SysUtils;
+  SysUtils, math;
 
 {
 extern "C" void toby(const char* nodePath, const char* processName, const char* userScript);
@@ -40,12 +43,23 @@ var
 i : integer = 0;
 begin
   writeln(':: example.pas main');
-  toby('./libnode.51.dylib', 'example', 'require("./app.js");');
+
+{$ifdef darwin}
+  toby('./libnode.48.dylib', 'example', 'require("./app.js");');
+{$else}
+  // disable the floating point exceptions
+  // otherwise, 'SIGFPE: invalid floating point operation' raises
+  SetExceptionMask([exInvalidOp, exPrecision]); // exDenormalized, exZeroDivide, exOverflow, exUnderflow,
+  toby('./libnode.so.48', 'example', 'require("./app.js");');
+{$endif}
 
   while true do
   begin
     i:= i+1;
+{$ifdef darwin}
+    // FIXME : there's a c++ error in linux
     tobyJSEmit('test', PChar(IntToStr(i)));
+{$endif}
     Sleep(1000);
   end;
 end.
