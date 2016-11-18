@@ -19,5 +19,17 @@ console.log(`toby.hostCall() = ${result}`);
 
 //setInterval(function(){},1000); // dummy event
 
+var cluster = require('cluster');
+cluster.on('c', function(x){console.log(x)});
+if (cluster.isMaster) {
+  console.log("im master");
+  cluster.fork();
+  cluster.emit('c', 'greeting from parent :)')
+} else {
+  console.log("im slave. bye bye");
+  cluster.emit('c','greeting from child :o')
+  process.exit(0);
+}
+
 
 return; // exit the scope. atExitCB

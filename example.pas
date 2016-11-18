@@ -41,16 +41,24 @@ end;
 
 var
 i : integer = 0;
+j : integer;
 begin
   writeln(':: example.pas main');
 
+  WriteLn(GetProcessID, ' Program: ', ParamStr(0));
+  for j := 1 to ParamCount do
+    WriteLn(GetProcessID, ' Param ', j, ': ', ParamStr(j));
+
+// for j := 0 to GetEnvironmentVariableCount - 1 do
+//     WriteLn(GetProcessID, ' ', GetEnvironmentString(j));
+
 {$ifdef darwin}
-  toby('./libnode.48.dylib', 'example', 'require("./app.js");');
+  toby('./libnode.51.dylib', PChar(ParamStr(0)), 'require("./app.js");');
 {$else}
   // disable the floating point exceptions
   // otherwise, 'SIGFPE: invalid floating point operation' raises
   SetExceptionMask([exInvalidOp, exPrecision]); // exDenormalized, exZeroDivide, exOverflow, exUnderflow,
-  toby('./libnode.so.48', 'example', 'require("./app.js");');
+  toby('./libnode.so.48', PChar(ParamStr(0)), 'require("./app.js");');
 {$endif}
 
   while true do
