@@ -31,6 +31,7 @@ fpc -Cg -Cn example.pas \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/system.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/objpas.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/sysutils.o \
+/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/math.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/unix.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/errors.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/sysconst.o \
@@ -40,7 +41,8 @@ fpc -Cg -Cn example.pas \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/unixutil.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/initc.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/ctypes.o \
-&& DYLD_LIBRARY_PATH=. `pwd`/example
+&& install_name_tool -change /usr/local/lib/libnode.51.dylib libnode.51.dylib example \
+&&  ./example
 ```
 
 ## ref
