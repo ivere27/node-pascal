@@ -17,23 +17,33 @@ uses
   SysUtils, math;
 
 {
-extern "C" void toby(const char* nodePath, const char* processName, const char* userScript);
-extern "C" char* tobyJSCompile(void* isolate, const char* source);
-extern "C" char* tobyJSCall(void* isolate, const char* name, const char* value);
-extern "C" bool tobyJSEmit(const char* name, const char* value);
+typedef void  (*TobyOnloadCB)(void* isolate);
+typedef char* (*TobyHostcallCB)(const char* name, const char* value);
+
+extern "C" void  tobyInit(const char* processName,
+                          const char* userScript,
+                          TobyOnloadCB,
+                          TobyHostcallCB);
+extern "C" char* tobyJSCompile(const char* source);
+extern "C" char* tobyJSCall(const char* name, const char* value);
+extern "C" bool  tobyJSEmit(const char* name, const char* value);
 }
 
-procedure toby(nodePath, processName, userScript: PChar); cdecl; external;
-function tobyJSCompile(isolate: Pointer; source: PChar):PChar; cdecl; external;
-function tobyJSCall(isolate: Pointer; name,value: PChar):PChar; cdecl; external;
+type
+  TobyOnloadCB = procedure (isolate: Pointer); cdecl;
+  TobyHostcallCB = function (name, value: PChar):PChar; cdecl;
+
+procedure tobyInit(processName, userScript: PChar; tobyOnLoad:TobyOnloadCB; tobyHostCall:TobyHostcallCB); cdecl; external;
+function tobyJSCompile(source: PChar):PChar; cdecl; external;
+function tobyJSCall(name, value: PChar):PChar; cdecl; external;
 function tobyJSEmit(name, value: PChar):PChar; cdecl; external;
 
 
-procedure tobyOnLoad(isolate: Pointer); cdecl; export;
+procedure tobyOnLoad(isolate: Pointer); cdecl;
 begin
   writeln(':: tobyOnLoad called');
 end;
-function tobyHostCall(isolate: Pointer; key,value: PChar):PChar; cdecl; export;
+function tobyHostCall(key,value: PChar):PChar; cdecl;
 begin
   writeln(':: tobyHostCall called');
   exit('from tobyHostCall');
@@ -53,12 +63,12 @@ begin
 //     WriteLn(GetProcessID, ' ', GetEnvironmentString(j));
 
 {$ifdef darwin}
-  toby('./libnode.51.dylib', PChar(ParamStr(0)), 'require("./app.js");');
+  tobyInit(PChar(ParamStr(0)), 'require("./app.js");', @tobyOnLoad, @tobyHostCall);
 {$else}
   // disable the floating point exceptions
   // otherwise, 'SIGFPE: invalid floating point operation' raises
   SetExceptionMask([exInvalidOp, exPrecision]); // exDenormalized, exZeroDivide, exOverflow, exUnderflow,
-  toby('./libnode.so.48', PChar(ParamStr(0)), 'require("./app.js");');
+  tobyInit(PChar(ParamStr(0)), 'console.log(42);', @tobyOnLoad, @tobyHostCall);
 {$endif}
 
   while true do

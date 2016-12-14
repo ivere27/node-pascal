@@ -1,13 +1,12 @@
 # node-pascal
 Embed Node.js into Free Pascal
 
-
 ## linux
 ```
-# toby and node-pascal
 clang++ ../toby/toby.cpp -c -o toby.o --std=c++11 -fPIC -I../node/deps/v8/include/ -I../node/src/ -g \
-&& fpc -g -Cg example.pas \
-&& LD_LIBRARY_PATH=. ./example
+&& fpc -g -Cg -Cn example.pas \
+&& /usr/bin/ld.bfd -b elf64-x86-64 -m elf_x86_64  --dynamic-linker=/lib64/ld-linux-x86-64.so.2 --rpath=. -L. -o example link.res \
+&& ./example
 ```
 
 ## mac - build node.js and toby for i386
@@ -26,7 +25,7 @@ make -j4
 ## compile and run
 ### fixme : workaround build command in mac
 ```
-fpc -Cg -Cn example.pas \
+fpc -g -Cg -Cn example.pas \
 && clang++ -o example example.o libnode.51.dylib  toby.o  -arch i386 \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/system.o \
 /usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/objpas.o \
