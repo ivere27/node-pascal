@@ -38,7 +38,6 @@ function tobyJSCompile(source: PChar):PChar; cdecl; external;
 function tobyJSCall(name, value: PChar):PChar; cdecl; external;
 function tobyJSEmit(name, value: PChar):PChar; cdecl; external;
 
-
 procedure tobyOnLoad(isolate: Pointer); cdecl;
 begin
   writeln(':: tobyOnLoad called');
@@ -67,8 +66,8 @@ begin
 {$else}
   // disable the floating point exceptions
   // otherwise, 'SIGFPE: invalid floating point operation' raises
-  SetExceptionMask([exInvalidOp, exPrecision]); // exDenormalized, exZeroDivide, exOverflow, exUnderflow,
-  tobyInit(PChar(ParamStr(0)), 'console.log(42);', @tobyOnLoad, @tobyHostCall);
+  SetExceptionMask([exInvalidOp, exPrecision, exZeroDivide]); // exDenormalized, exOverflow, exUnderflow,
+  tobyInit(PChar(ParamStr(0)), 'console.log(process);', @tobyOnLoad, @tobyHostCall);
 {$endif}
 
   while true do
