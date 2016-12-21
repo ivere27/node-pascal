@@ -75,10 +75,7 @@ begin
   while true do
   begin
     i:= i+1;
-{$ifdef darwin}
-    // FIXME : there's a c++ error in linux
     tobyJSEmit('test', PChar(IntToStr(i)));
-{$endif}
     Sleep(1000);
   end;
 end.
