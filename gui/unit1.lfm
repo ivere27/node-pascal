@@ -1,0 +1,62 @@
+object Form1: TForm1
+  Left = 1692
+  Height = 375
+  Top = 152
+  Width = 585
+  Caption = 'Form1'
+  ClientHeight = 375
+  ClientWidth = 585
+  OnCreate = FormCreate
+  LCLVersion = '1.6.0.4'
+  object Memo1: TMemo
+    Left = 10
+    Height = 326
+    Top = 10
+    Width = 566
+    Lines.Strings = (
+      '''use strict'''
+      ''
+      'var num = 42;'
+      'var foo = ''foo'';'
+      'global.bar = function(x) {'
+      '  return `${foo} bar ${x}`;'
+      '}'
+      'var baz = function(x) {'
+      '  console.log(`baz() = ${foo} ${x}`);'
+      '}'
+      ''
+      'toby.on(''test'', function(x){'
+      '  console.log(`toby.on(test) = ${x}`);'
+      '});'
+      ''
+      'var result = toby.hostCall(''dory'', {num, foo});'
+      'console.log(`toby.hostCall() = ${result}`);'
+    )
+    TabOrder = 0
+  end
+  object Edit1: TEdit
+    Left = 10
+    Height = 27
+    Top = 344
+    Width = 80
+    TabOrder = 1
+    Text = 'test'
+  end
+  object Edit2: TEdit
+    Left = 96
+    Height = 27
+    Top = 344
+    Width = 144
+    TabOrder = 2
+    Text = '42'
+  end
+  object Button1: TButton
+    Left = 248
+    Height = 25
+    Top = 346
+    Width = 75
+    Caption = 'emit'
+    OnClick = Button1Click
+    TabOrder = 3
+  end
+end
