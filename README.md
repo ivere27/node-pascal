@@ -4,8 +4,7 @@ Embed Node.js into Free Pascal
 ## linux
 ```
 clang++ ../toby/toby.cpp -c -o toby.o --std=c++11 -fPIC -I../node/deps/v8/include/ -I../node/src/ -g \
-&& fpc -g -Cg -Cn example.pas \
-&& /usr/bin/ld.bfd -b elf64-x86-64 -m elf_x86_64  --dynamic-linker=/lib64/ld-linux-x86-64.so.2 --rpath=. -L. -o example link.res \
++&& fpc -g -Cg -k--rpath=. example.pas \
 && ./example
 ```
 

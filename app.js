@@ -1,4 +1,4 @@
-'ust strict'
+'use strict'
 
 var num = 42;
 var foo = 'foo';

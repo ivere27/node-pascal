@@ -33,6 +33,7 @@ type
   TobyOnloadCB = procedure (isolate: Pointer); cdecl;
   TobyHostcallCB = function (name, value: PChar):PChar; cdecl;
 
+procedure _tobyRegister(); cdecl; external;
 procedure tobyInit(processName, userScript: PChar; tobyOnLoad:TobyOnloadCB; tobyHostCall:TobyHostcallCB); cdecl; external;
 function tobyJSCompile(source: PChar):PChar; cdecl; external;
 function tobyJSCall(name, value: PChar):PChar; cdecl; external;
@@ -67,7 +68,8 @@ begin
   // disable the floating point exceptions
   // otherwise, 'SIGFPE: invalid floating point operation' raises
   SetExceptionMask([exInvalidOp, exPrecision, exZeroDivide]); // exDenormalized, exOverflow, exUnderflow,
-  tobyInit(PChar(ParamStr(0)), 'console.log(process);', @tobyOnLoad, @tobyHostCall);
+  _tobyRegister;
+  tobyInit(PChar(ParamStr(0)), 'require("./app.js");', @tobyOnLoad, @tobyHostCall);
 {$endif}
 
   while true do
