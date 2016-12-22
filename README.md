@@ -8,10 +8,10 @@ clang++ ../toby/toby.cpp -c -o toby.o --std=c++11 -fPIC -I../node/deps/v8/includ
 && ./example
 ```
 
-## gui example by lazarus
+## lazarus - gui
 ```
-# cd gui && \
-rm -rf lib && lazbuild project1.lpi && ./project1
+# cd gui && rm -rf lib && \
+lazbuild project1.lpi && ./project1
 ```
 
 ## mac - build node.js and toby for i386
