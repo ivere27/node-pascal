@@ -69,3 +69,6 @@ __recovery/
 
 # toby
 example
+project1
+*.bak
+*.ppu
