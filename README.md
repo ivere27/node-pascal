@@ -49,5 +49,11 @@ fpc -g -Cg -Cn example.pas \
 &&  ./example
 ```
 
+## win
+```
+# build 'toby' as OMF object using C++ Builder or BCC32C C++ compiler(https://www.embarcadero.com/free-tools/ccompiler)
+# (not COFF by VC++)
+```
+
 ## ref
 http://wiki.freepascal.org/Using_Pascal_Libraries_with_.NET_and_Mono
