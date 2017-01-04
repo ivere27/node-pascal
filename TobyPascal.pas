@@ -85,7 +85,6 @@ begin
   // disable the floating point exceptions
   // otherwise, 'SIGFPE: invalid floating point operation' raises
   SetExceptionMask([exInvalidOp, exPrecision, exZeroDivide]); // exDenormalized, exOverflow, exUnderflow,
-  _tobyRegister;
 {$endif}
 
   inherited Create;
