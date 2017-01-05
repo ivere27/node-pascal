@@ -50,9 +50,6 @@ extern "C" char* tobyJSCall(const char* name, const char* value);
 extern "C" bool  tobyJSEmit(const char* name, const char* value);
 }
 
-{$ifdef linux}
-procedure _tobyRegister(); cdecl; external;
-{$endif}
 procedure tobyInit(processName, userScript: PChar; tobyOnLoad:TobyOnloadCB; tobyHostCall:TobyHostcallCB); cdecl; external;
 function tobyJSCompile(source: PChar):PChar; cdecl; external;
 function tobyJSCall(name, value: PChar):PChar; cdecl; external;
