@@ -27,4 +27,7 @@ console.log(`node :: toby.hostCall() = ${result}`);
 // }
 
 
-//return; // exit the scope. atExitCB
+// exit after 2 secs
+(function(){setTimeout(function(){
+  process.exitCode = 42;
+},2000)})();

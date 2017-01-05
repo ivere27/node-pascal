@@ -21,6 +21,7 @@ uses
 
 type
   TobyOnloadCB = procedure (isolate: Pointer); cdecl;
+  TobyOnunloadCB = procedure (isolate: Pointer; exitCode: integer); cdecl;
   TobyHostcallCB = function (name, value: PChar):PChar; cdecl;
 
   TToby = class
@@ -29,6 +30,7 @@ type
       constructor Init;
     public
       onLoad : TobyOnloadCB;
+      onUnload : TobyOnunloadCB;
       onHostCall : TobyHostcallCB;
 
       function start(processName, userScript: PChar) : boolean;
@@ -39,18 +41,23 @@ type
 
 {
 typedef void  (*TobyOnloadCB)(void* isolate);
+typedef void  (*TobyOnunloadCB)(void* isolate, int exitCode);
 typedef char* (*TobyHostcallCB)(const char* name, const char* value);
 
 extern "C" void  tobyInit(const char* processName,
                           const char* userScript,
                           TobyOnloadCB,
+                          TobyOnunloadCB,
                           TobyHostcallCB);
 extern "C" char* tobyJSCompile(const char* source);
 extern "C" char* tobyJSCall(const char* name, const char* value);
 extern "C" bool  tobyJSEmit(const char* name, const char* value);
 }
 
-procedure tobyInit(processName, userScript: PChar; tobyOnLoad:TobyOnloadCB; tobyHostCall:TobyHostcallCB); cdecl; external;
+procedure tobyInit(processName, userScript: PChar;
+                   tobyOnLoad: TobyOnloadCB;
+                   tobyOnUnload: TobyOnunloadCB;
+                   tobyHostCall: TobyHostcallCB); cdecl; external;
 function tobyJSCompile(source: PChar):PChar; cdecl; external;
 function tobyJSCall(name, value: PChar):PChar; cdecl; external;
 function tobyJSEmit(name, value: PChar):PChar; cdecl; external;
@@ -64,6 +71,10 @@ procedure _OnLoad(isolate: Pointer); cdecl;
 begin
   //writeln(':: default tobyOnLoad called');
 end;
+procedure _OnUnload(isolate: Pointer; exitCode: integer); cdecl;
+begin
+  //writeln(':: default _OnUnload called');
+end;
 function _OnHostCall(key,value: PChar):PChar; cdecl;
 begin
   //writeln(':: default tobyHostCall called. ', key, ' : ',value);
@@ -76,6 +87,7 @@ begin
 
   // set default.
   onLoad := @_OnLoad;
+  onUnload := @_OnUnload;
   onHostCall := @_OnHostCall;
 
 {$ifdef linux}
@@ -99,7 +111,7 @@ begin
   if started = false then
   begin
     started := true;
-    tobyInit(processName, userScript, onLoad, onHostCall);
+    tobyInit(processName, userScript, onLoad, onUnload, onHostCall);
     exit(true);
   end;
   exit(false);

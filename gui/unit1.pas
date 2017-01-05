@@ -43,6 +43,10 @@ begin
 
   toby.run('console.log("node :: hi~");');
 end;
+procedure tobyOnUnload(isolate: Pointer; exitCode: Integer); cdecl;
+begin
+  writeln('host :: tobyOnUnload called. ', exitCode);
+end;
 function tobyHostCall(key,value: PChar):PChar; cdecl;
 begin
   writeln('host :: tobyHostCall called. ', key, ' : ',value);
@@ -54,6 +58,7 @@ begin
   // start Toby
   toby := TToby.Create;
   toby.onLoad := @tobyOnLoad;
+  toby.onUnload := @tobyOnUnload;
   toby.onHostCall := @tobyHostCall;
   toby.start(PChar(ParamStr(0)), Memo1.Lines.GetText);
 end;
