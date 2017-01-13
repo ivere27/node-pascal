@@ -30,29 +30,19 @@ make -j4
 ### fixme : workaround build command in mac
 ```
 fpc -g -Cg -Cn TobyPascal.pas \
-fpc -g -Cg -Cn example.pas \
-&& clang++ -o example  libnode.48.dylib toby.o TobyPascal.o example.o  -arch i386 \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/system.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/objpas.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/sysutils.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/math.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/classes.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/unix.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/errors.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/sysconst.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/unixtype.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/baseunix.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/sysctl.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/unixutil.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/initc.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/ctypes.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/types.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/typinfo.o \
-/usr/local/lib/fpc/3.0.0/units/i386-darwin/rtl/rtlconsts.o \
--lc -ldl \
+&& fpc -g -Cg example.pas \
 && install_name_tool -change /usr/local/lib/libnode.48.dylib libnode.48.dylib example \
 &&  ./example
 ```
+
+## lazarus in mac - gui
+```bash
+# cd gui && rm -rf lib && \
+lazbuild project1.lpi \
+&& install_name_tool -change /usr/local/lib/libnode.48.dylib libnode.48.dylib project1 \
+&& ./project1
+```
+
 
 ## win
 ```
