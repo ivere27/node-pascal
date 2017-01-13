@@ -63,7 +63,9 @@
     <Linking>
       <Options>
         <PassLinkerOptions Value="True"/>
-        <LinkerOptions Value="--rpath=."/>
+        <Linux>
+          <LinkerOptions Value="--rpath=."/>
+        </Linux>
         <Win32>
           <GraphicApplication Value="True"/>
         </Win32>

@@ -3,6 +3,16 @@ unit TobyPascal;
 {$mode objfpc}
 {$H+}
 
+{$ifdef darwin}
+{$link toby.o}
+{$link libnode.48.dylib}
+{$link /usr/lib/libgcc_s.10.5.dylib}
+
+{$linklib c}
+{$linklib dl}
+{$linklib c++}
+{$endif}
+
 {$ifdef linux}
 {$link toby.o}
 {$Link libnode.so.48}
