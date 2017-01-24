@@ -1,7 +1,10 @@
 # node-pascal
 Embed Node.js into Free Pascal
 
-## Example
+## Example - gui
+![alt tag](https://github.com/ivere27/node-pascal/blob/master/doc/node-pascal.png?raw=true)
+
+## Example - tui
 ```pascal
 program example;
 
