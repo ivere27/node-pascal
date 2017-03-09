@@ -26,7 +26,6 @@ end;
 
 var
 i : integer = 0;
-j : integer;
 begin
   writeln('host :: example.pas main');
 

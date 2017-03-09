@@ -59,18 +59,18 @@ extern "C" void  tobyInit(const char* processName,
                           TobyOnloadCB,
                           TobyOnunloadCB,
                           TobyHostcallCB);
-extern "C" char* tobyJSCompile(const char* source);
-extern "C" char* tobyJSCall(const char* name, const char* value);
-extern "C" bool  tobyJSEmit(const char* name, const char* value);
+extern "C" int tobyJSCompile(const char* source, char* dest, size_t n);
+extern "C" int tobyJSCall(const char* name, const char* value, char* dest, size_t n);
+extern "C" int tobyJSEmit(const char* name, const char* value);
 }
 
 procedure tobyInit(processName, userScript: PChar;
                    tobyOnLoad: TobyOnloadCB;
                    tobyOnUnload: TobyOnunloadCB;
                    tobyHostCall: TobyHostcallCB); cdecl; external;
-function tobyJSCompile(source: PChar):PChar; cdecl; external;
-function tobyJSCall(name, value: PChar):PChar; cdecl; external;
-function tobyJSEmit(name, value: PChar):PChar; cdecl; external;
+function tobyJSCompile(source, dest: PChar; n: integer):integer; cdecl; external;
+function tobyJSCall(name, value, dest: PChar; n: integer):integer; cdecl; external;
+function tobyJSEmit(name, value: PChar):integer; cdecl; external;
 
 implementation
 var
@@ -134,8 +134,15 @@ begin
 end;
 
 function TToby.run(source: PChar) : PChar;
+var
+  dest: Array[0..1024] of Char;
+  ret: integer;
 begin
-  exit(tobyJSCompile(source));
+  ret := tobyJSCompile(source, dest, Length(dest));
+  if (ret < 0) then
+    writeln('** Error ', ret, ' ', dest);
+
+  exit(dest);
 end;
 
 end.
